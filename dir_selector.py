@@ -17,7 +17,7 @@ class DirectorySelectorApp:
     def __init__(self, root):
         self.root = root
         self.root.title("文件合并工具 (异步增强版)")
-        self.root.geometry("1100x750")
+        self.root.geometry("1200x850")
         
         # 存储状态: {item_id: {'path': path, 'is_dir': bool, 'selected': bool, 'recursive': bool}}
         self.node_states = {}
@@ -27,6 +27,18 @@ class DirectorySelectorApp:
         # 状态文字
         self.status_var = tk.StringVar(value="就绪")
         self.progress_var = tk.DoubleVar(value=0)
+
+        # 文件类型配置
+        self.file_types = {
+            "代码文件": [".py", ".c", ".cpp", ".h", ".java", ".js", ".ts", ".html", ".css", ".php", ".go", ".rs", ".sql", ".sh", ".bat"],
+            "文档文件": [".txt", ".md", ".csv", ".rst", ".log"],
+            "配置文件": [".json", ".xml", ".yaml", ".yml", ".ini", ".conf", ".toml", ".env"],
+            "日志文件": [".log", ".out", ".err"]
+        }
+        self.type_vars = {} # {category: BooleanVar}
+        self.all_exts = set()
+        for exts in self.file_types.values():
+            self.all_exts.update(exts)
         
         self.setup_ui()
         self.load_drives()
@@ -45,6 +57,25 @@ class DirectorySelectorApp:
         ttk.Label(output_frame, text="输出目录:").pack(side=tk.LEFT, padx=5, pady=10)
         ttk.Entry(output_frame, textvariable=self.output_dir, width=80).pack(side=tk.LEFT, padx=5, fill=tk.X, expand=True)
         ttk.Button(output_frame, text="浏览...", command=self.browse_output_dir).pack(side=tk.LEFT, padx=5)
+
+        # 文件类型筛选区域
+        filter_frame = ttk.LabelFrame(self.root, text="文件类型筛选 (仅合并选中的格式)")
+        filter_frame.pack(fill=tk.X, padx=10, pady=5)
+        
+        # 全选/全取消
+        select_all_btn = ttk.Button(filter_frame, text="全选", width=8, command=self._select_all_types)
+        select_all_btn.pack(side=tk.LEFT, padx=5, pady=5)
+        deselect_all_btn = ttk.Button(filter_frame, text="清空", width=8, command=self._deselect_all_types)
+        deselect_all_btn.pack(side=tk.LEFT, padx=5, pady=5)
+
+        # 类型复选框
+        for category in self.file_types.keys():
+            var = tk.BooleanVar(value=True)
+            self.type_vars[category] = var
+            cb = ttk.Checkbutton(filter_frame, text=category, variable=var)
+            cb.pack(side=tk.LEFT, padx=10)
+            # 悬停提示
+            self._create_tooltip(cb, f"包含: {' '.join(self.file_types[category])}")
 
         # Treeview 区域
         self.tree_frame = ttk.Frame(self.root)
@@ -95,6 +126,22 @@ class DirectorySelectorApp:
             bg="#0078D7", fg="white", font=("Microsoft YaHei", 10, "bold"), padx=20
         )
         self.run_btn.pack(side=tk.RIGHT, padx=5)
+
+    def _select_all_types(self):
+        for var in self.type_vars.values():
+            var.set(True)
+
+    def _deselect_all_types(self):
+        for var in self.type_vars.values():
+            var.set(False)
+
+    def _create_tooltip(self, widget, text):
+        def enter(event):
+            self.status_var.set(text)
+        def leave(event):
+            self.status_var.set("就绪")
+        widget.bind("<Enter>", enter)
+        widget.bind("<Leave>", leave)
 
     def browse_output_dir(self):
         directory = filedialog.askdirectory(initialdir=self.output_dir.get())
@@ -158,10 +205,16 @@ class DirectorySelectorApp:
         if error:
             self.tree.insert(parent_node, tk.END, text=f" ❌ 无法访问: {error}")
         else:
+            parent_state = self.node_states.get(parent_node, {})
+            parent_selected = parent_state.get("selected", False)
+            parent_recursive = parent_state.get("recursive", False)
+
             for entry in sorted(dirs, key=lambda e: e.name.lower()):
+                # 如果父节点选中且开启递归，子目录也自动选中
+                is_selected = parent_selected and parent_recursive
                 node = self.tree.insert(parent_node, tk.END, text=f" 📁 {entry.name}", 
-                                       values=("☐", "☐"), open=False)
-                self.node_states[node] = {"path": entry.path, "is_dir": True, "selected": False, "recursive": False}
+                                       values=("☑" if is_selected else "☐", "☐"), open=False)
+                self.node_states[node] = {"path": entry.path, "is_dir": True, "selected": is_selected, "recursive": False}
                 try:
                     # 快速检查是否有子项以显示展开箭头
                     if any(os.scandir(entry.path)):
@@ -169,9 +222,12 @@ class DirectorySelectorApp:
                 except: pass
                 
             for entry in sorted(files, key=lambda e: e.name.lower()):
+                # 如果父节点选中，子文件自动选中（不论是否递归）
+                # 或者父节点递归选中，子文件也必须选中
+                is_selected = parent_selected
                 node = self.tree.insert(parent_node, tk.END, text=f" 📄 {entry.name}", 
-                                       values=("☐", "-"), open=False)
-                self.node_states[node] = {"path": entry.path, "is_dir": False, "selected": False, "recursive": None}
+                                       values=("☑" if is_selected else "☐", "-"), open=False)
+                self.node_states[node] = {"path": entry.path, "is_dir": False, "selected": is_selected, "recursive": None}
         
         self.status_var.set("就绪")
 
@@ -188,9 +244,49 @@ class DirectorySelectorApp:
                 state["selected"] = not state["selected"]
                 self.tree.set(item_id, "selected", "☑" if state["selected"] else "☐")
                 
+                # 处理级联选择
+                if state["is_dir"]:
+                    self._cascade_selection(item_id, state["selected"], state["recursive"])
+                
             elif column == "#2" and state["is_dir"]:  # 递归列
                 state["recursive"] = not state["recursive"]
                 self.tree.set(item_id, "recursive", "☑" if state["recursive"] else "☐")
+                
+                # 如果当前目录已选中，切换递归状态时需要更新下级状态
+                if state["selected"]:
+                    self._cascade_selection(item_id, True, state["recursive"])
+
+    def _cascade_selection(self, parent_node, is_selected, recursive):
+        """向下级联更新选择状态"""
+        for child in self.tree.get_children(parent_node):
+            if child not in self.node_states:
+                continue
+            
+            child_state = self.node_states[child]
+            
+            # 逻辑：
+            # 1. 如果是文件：始终跟随父目录的选中状态
+            # 2. 如果是目录：
+            #    - 如果父目录开启递归：子目录跟随父目录选中状态，并继续向下递归
+            #    - 如果父目录关闭递归：子目录不自动选中（除非之前就选中了，但用户要求是“选中目录后自动选中下一级文件”）
+            
+            if not child_state["is_dir"]:
+                # 文件处理
+                child_state["selected"] = is_selected
+                self.tree.set(child, "selected", "☑" if is_selected else "☐")
+            else:
+                # 目录处理
+                if recursive:
+                    # 递归模式下，子目录同步状态并继续向下级联
+                    child_state["selected"] = is_selected
+                    self.tree.set(child, "selected", "☑" if is_selected else "☐")
+                    self._cascade_selection(child, is_selected, True)
+                else:
+                    # 非递归模式下，取消选中父目录时，如果之前是同步选中的，则也取消选中子目录
+                    if not is_selected:
+                        child_state["selected"] = False
+                        self.tree.set(child, "selected", "☑" if False else "☐")
+                        self._cascade_selection(child, False, False)
 
     def run_process(self):
         """主入口，启动异步处理线程"""
@@ -237,22 +333,43 @@ class DirectorySelectorApp:
     def worker_thread(self, selected_files, selected_dirs, out_dir):
         """后台工作线程逻辑"""
         try:
+            # 0. 获取允许的文件后缀名
+            allowed_exts = set()
+            for category, var in self.type_vars.items():
+                if var.get():
+                    allowed_exts.update(self.file_types[category])
+            
+            # 如果什么都没选，默认不进行后缀名过滤，或者提示错误
+            # 这里我们选择如果什么都没选，则只合并用户显式勾选的单个文件，不扫描目录
+            
             # 1. 扫描文件
-            total_file_paths = set(selected_files)
+            total_file_paths = set()
+            
+            # 处理显式勾选的文件
+            for fpath in selected_files:
+                ext = os.path.splitext(fpath)[1].lower()
+                if not allowed_exts or ext in allowed_exts:
+                    total_file_paths.add(fpath)
+
+            # 处理勾选的目录
             for d_path, recursive in selected_dirs:
                 if recursive:
                     for root, _, files in os.walk(d_path):
                         for f in files:
-                            total_file_paths.add(os.path.join(root, f))
+                            ext = os.path.splitext(f)[1].lower()
+                            if not allowed_exts or ext in allowed_exts:
+                                total_file_paths.add(os.path.join(root, f))
                 else:
                     try:
                         for entry in os.scandir(d_path):
                             if entry.is_file():
-                                total_file_paths.add(entry.path)
+                                ext = os.path.splitext(entry.name)[1].lower()
+                                if not allowed_exts or ext in allowed_exts:
+                                    total_file_paths.add(entry.path)
                     except: pass
 
             if not total_file_paths:
-                self.root.after(0, lambda: messagebox.showinfo("提示", "未找到任何待合并的文件"))
+                self.root.after(0, lambda: messagebox.showinfo("提示", "根据当前的筛选条件，未找到任何匹配的文件"))
                 self.root.after(0, lambda: self.finish_ui_update())
                 return
 
