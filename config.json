@@ -1,0 +1,236 @@
+{
+    "file_types": {
+        "代码文件": [
+            ".bat",
+            ".c",
+            ".cpp",
+            ".cs",
+            ".css",
+            ".go",
+            ".h",
+            ".html",
+            ".java",
+            ".js",
+            ".php",
+            ".py",
+            ".rs",
+            ".sh",
+            ".sql",
+            ".ts"
+        ],
+        "文档文件": [
+            ".txt",
+            ".md",
+            ".csv",
+            ".rst",
+            ".log"
+        ],
+        "配置文件": [
+            ".json",
+            ".xml",
+            ".yaml",
+            ".yml",
+            ".ini",
+            ".conf",
+            ".toml",
+            ".env"
+        ],
+        "日志文件": [
+            ".log",
+            ".out",
+            ".err"
+        ]
+    },
+    "selected_states": {
+        "D:\\soft_data\\AIMuster\\Converter": {
+            "selected": true,
+            "recursive": false
+        },
+        "D:\\soft_data\\AIMuster\\Converter\\BoolToVisibilityConverter.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\soft_data\\AIMuster\\Converter\\MultiSelectCommandParameterConverter.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\RailwayStationCommunicationDesign\\UI\\FrmSealInfoSet.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\RailwayStationCommunicationDesign\\UI\\FrmSealInfoSet.Designer.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\RailwayStationCommunicationDesign\\UI\\FrmSealInfoSet.resx": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\test_data\\C\\crm\\sun\\suncrm": {
+            "selected": true,
+            "recursive": true
+        },
+        "D:\\test_data\\C\\crm\\sun\\suncrm\\.gitignore": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\test_data\\C\\crm\\sun\\suncrm\\build.gradle": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\test_data\\C\\crm\\sun\\suncrm\\gradle.properties": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\test_data\\C\\crm\\sun\\suncrm\\gradlew": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\test_data\\C\\crm\\sun\\suncrm\\gradlew.bat": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\test_data\\C\\crm\\sun\\suncrm\\local.properties": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\test_data\\C\\crm\\sun\\suncrm\\settings.gradle": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\test_data\\C\\crm\\sun\\suncrm\\.gradle": {
+            "selected": true,
+            "recursive": false
+        },
+        "D:\\test_data\\C\\crm\\sun\\suncrm\\.idea": {
+            "selected": true,
+            "recursive": false
+        },
+        "D:\\test_data\\C\\crm\\sun\\suncrm\\app": {
+            "selected": true,
+            "recursive": false
+        },
+        "D:\\test_data\\C\\crm\\sun\\suncrm\\build": {
+            "selected": true,
+            "recursive": false
+        },
+        "D:\\test_data\\C\\crm\\sun\\suncrm\\gradle": {
+            "selected": true,
+            "recursive": false
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth": {
+            "selected": true,
+            "recursive": false
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\.gitignore": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\CadCommand.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\CadDiamondTooth.csproj": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\CadDiamondTooth2024.csproj": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\CadGeneralClass.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\CadTooth.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\CadToothLine.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\CharpBaseUtil.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\CommonTrans.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\DataModelUtils.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\ExtensionMethods.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\FunAchieve.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\GeneralTooth.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\packages.config": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\PositionUtils.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\treelist.txt": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\WinFormTooth.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\WorkbookUtil.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\UI": {
+            "selected": true,
+            "recursive": false
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\UI\\AIConfig.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\UI\\AIForm.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\UI\\AIForm.Designer.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\UI\\AIForm.resx": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\UI\\AutoCadOperation.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\UI\\WebChatForm.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\UI\\WebChatForm.Designer.cs": {
+            "selected": true,
+            "recursive": null
+        },
+        "D:\\code\\trunk\\projects\\project\\CadDiamondTooth\\UI\\WebChatForm.resx": {
+            "selected": true,
+            "recursive": null
+        }
+    },
+    "jump_path": "D:\\code\\trunk\\projects\\project\\CadDiamondTooth",
+    "search_query": ""
+}
